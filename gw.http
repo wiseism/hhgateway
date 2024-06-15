@@ -1,0 +1,24 @@
+### hello-post
+POST http://localhost:8888/hello/aa
+Content-Type: application/json
+
+{
+  "aaa": 111,
+  "bbb": "b01"
+}
+
+### hello-get
+GET http://localhost:8888/hello
+Accept: application/json
+
+### gw-get
+GET http://localhost:8888/gw
+Accept: application/json
+
+### gw-post
+POST http://localhost:8888/gw/aa
+Content-Type: application/json
+
+{
+
+}
