@@ -27,7 +27,7 @@ Content-Type: application/json
 
 
 ### ga
-POST http://localhost:8888/ga/com.hhrpc.hhrpc.demo.api.UserService
+POST http://localhost:8888/ga/com.hhrpc.hhrpc.demo.api.UserService?mock=true
 Content-Type: application/json
 
 {
