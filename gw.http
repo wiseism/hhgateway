@@ -24,3 +24,14 @@ Content-Type: application/json
   "methodSign": "findById#java.lang.Integer",
   "args": [100]
 }
+
+
+### ga
+POST http://localhost:8888/ga/com.hhrpc.hhrpc.demo.api.UserService
+Content-Type: application/json
+
+{
+  "serviceName": "com.hhrpc.hhrpc.demo.api.UserService",
+  "methodSign": "findById#java.lang.Integer",
+  "args": [100]
+}

@@ -1,5 +1,6 @@
 package io.gitee.hefren.hhgateway.conf;
 
+import io.gitee.hefren.hhgateway.handler.HelloHandler;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package io.gitee.hefren.hhgateway.conf;
+package io.gitee.hefren.hhgateway.handler;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;

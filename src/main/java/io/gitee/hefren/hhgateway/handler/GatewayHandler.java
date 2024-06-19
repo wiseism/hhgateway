@@ -1,4 +1,4 @@
-package io.gitee.hefren.hhgateway.conf;
+package io.gitee.hefren.hhgateway.handler;
 
 import com.hhrpc.hhrpc.core.api.LoadBalance;
 import com.hhrpc.hhrpc.core.api.RegisterCenter;
