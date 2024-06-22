@@ -1,4 +1,4 @@
-package io.gitee.hefren.hhgateway.filter;
+package io.gitee.hefren.hhgateway.web.filter;
 
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;

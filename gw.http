@@ -15,8 +15,18 @@ Accept: application/json
 GET http://localhost:8888/gw
 Accept: application/json
 
-### gw-post
-POST http://localhost:8888/gw/com.hhrpc.hhrpc.demo.api.UserService
+### gw-hhrpc
+POST http://localhost:8888/gw/hhrpc/com.hhrpc.hhrpc.demo.api.UserService
+Content-Type: application/json
+
+{
+  "serviceName": "com.hhrpc.hhrpc.demo.api.UserService",
+  "methodSign": "findById#java.lang.Integer",
+  "args": [100]
+}
+
+### gw-direct
+POST http://localhost:8888/gw/direct/com.hhrpc.hhrpc.demo.api.UserService?backend=http://localhost:8082/hhrpc
 Content-Type: application/json
 
 {

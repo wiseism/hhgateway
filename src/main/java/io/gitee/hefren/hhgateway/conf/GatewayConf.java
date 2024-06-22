@@ -6,6 +6,7 @@ import com.hhrpc.hhrpc.core.api.Router;
 import com.hhrpc.hhrpc.core.cluster.RoundBionLoadBalance;
 import com.hhrpc.hhrpc.core.meta.InstanceMeta;
 import com.hhrpc.hhrpc.core.register.HhRegsiterCenter;
+import io.gitee.hefren.hhgateway.plugin.GatewayPlugin;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -41,8 +42,7 @@ public class GatewayConf {
         return args->{
             SimpleUrlHandlerMapping simpleUrlHandlerMapping = applicationContext.getBean(SimpleUrlHandlerMapping.class);
             Properties mappings = new Properties();
-            mappings.put("/ga/**", "gatewayWebHandler");
-            mappings.put("/gw/**", "gatewayWebHandler");
+            mappings.put(GatewayPlugin.GATEWAY_PREFIX + "/**", "gatewayWebHandler");
             simpleUrlHandlerMapping.setMappings(mappings);
             simpleUrlHandlerMapping.initApplicationContext();
         };
