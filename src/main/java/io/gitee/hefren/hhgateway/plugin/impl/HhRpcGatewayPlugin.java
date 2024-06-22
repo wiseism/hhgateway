@@ -6,7 +6,10 @@ import com.hhrpc.hhrpc.core.api.Router;
 import com.hhrpc.hhrpc.core.meta.InstanceMeta;
 import com.hhrpc.hhrpc.core.meta.ServiceMeta;
 import io.gitee.hefren.hhgateway.plugin.AbstractGatewayPlugin;
+import io.gitee.hefren.hhgateway.plugin.GatewayPluginChain;
 import jakarta.annotation.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +28,8 @@ import java.util.List;
 @Component(value = "hhRpcGatewayPlugin")
 public class HhRpcGatewayPlugin extends AbstractGatewayPlugin {
 
+    private static final Logger log = LoggerFactory.getLogger(HhRpcGatewayPlugin.class);
+
     private static final String NAME = "hhrpc";
 
     @Resource
@@ -37,7 +42,8 @@ public class HhRpcGatewayPlugin extends AbstractGatewayPlugin {
     private LoadBalance<InstanceMeta> loadBalance;
 
     @Override
-    public Mono<Void> doHandle(ServerWebExchange exchange) {
+    public Mono<Void> doHandle(ServerWebExchange exchange, GatewayPluginChain chain) {
+        log.debug("====> HhRpcGatewayPlugin doHandle");
         // 1. 从请求路径中获取service
         String service = exchange.getRequest().getPath().value().substring(getGatewayPrefix().length());
         // 2. 从注册中心获取服务实例
@@ -55,7 +61,7 @@ public class HhRpcGatewayPlugin extends AbstractGatewayPlugin {
         exchange.getResponse().getHeaders().add("hhgateway.version", "v0.0.1");
         exchange.getResponse().getHeaders().add("hhgateway.plugin", getName());
         return responseBody.flatMap(result->exchange.getResponse().writeWith(Mono.just(exchange.getResponse()
-                .bufferFactory().wrap(result.getBytes()))));
+                .bufferFactory().wrap(result.getBytes())))).then(chain.handle(exchange));
     }
 
     @Override

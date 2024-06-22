@@ -5,3 +5,8 @@ server:
   port: 8888
 hhregister:
   servers: http://localhost:8383
+
+logging:
+  level:
+    root: error
+    io.gitee.hefren.hhgateway: debug

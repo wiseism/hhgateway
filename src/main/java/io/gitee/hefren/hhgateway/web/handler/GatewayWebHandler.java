@@ -5,6 +5,7 @@ import com.hhrpc.hhrpc.core.api.RegisterCenter;
 import com.hhrpc.hhrpc.core.api.Router;
 import com.hhrpc.hhrpc.core.meta.InstanceMeta;
 import com.hhrpc.hhrpc.core.meta.ServiceMeta;
+import io.gitee.hefren.hhgateway.plugin.DefaultGatewayPluginChain;
 import io.gitee.hefren.hhgateway.plugin.GatewayPlugin;
 import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
@@ -37,12 +38,14 @@ public class GatewayWebHandler implements WebHandler {
         if (Objects.isNull(pluginList) || pluginList.isEmpty()) {
             return createOtherResult("{\"result\": \"pluginList is empty\"}", exchange);
         }
-        for (GatewayPlugin gatewayPlugin : pluginList) {
-            if (gatewayPlugin.support(exchange)) {
-                return gatewayPlugin.handle(exchange);
-            }
-        }
-        return createOtherResult("{\"result\": \"none support plugin\"}", exchange);
+//        for (GatewayPlugin gatewayPlugin : pluginList) {
+//            if (gatewayPlugin.support(exchange)) {
+//                return gatewayPlugin.handle(exchange);
+//            }
+//        }
+        // 通过链挨个判断执行
+        return new DefaultGatewayPluginChain(pluginList).handle(exchange);
+//        return createOtherResult("{\"result\": \"none support plugin\"}", exchange);
     }
 
     private static Mono<Void> createOtherResult(String result, ServerWebExchange exchange) {

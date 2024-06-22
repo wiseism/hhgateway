@@ -2,6 +2,9 @@ package io.gitee.hefren.hhgateway.plugin.impl;
 
 import com.google.common.base.Strings;
 import io.gitee.hefren.hhgateway.plugin.AbstractGatewayPlugin;
+import io.gitee.hefren.hhgateway.plugin.GatewayPluginChain;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +21,13 @@ import reactor.core.publisher.Mono;
 @Component(value = "directGatewayPlugin")
 public class DirectGatewayPlugin extends AbstractGatewayPlugin {
 
+    private static final Logger log = LoggerFactory.getLogger(DirectGatewayPlugin.class);
+
     private static final String NAME = "direct";
 
     @Override
-    public Mono<Void> doHandle(ServerWebExchange exchange) {
+    public Mono<Void> doHandle(ServerWebExchange exchange, GatewayPluginChain chain) {
+        log.debug("=====> DirectGatewayPlugin doHandle....");
         // 1. 从请求路径中获取backend参数
         String url = exchange.getRequest().getQueryParams().getFirst("backend");
         exchange.getResponse().getHeaders().setContentType(MediaType.APPLICATION_JSON);
@@ -33,7 +39,7 @@ public class DirectGatewayPlugin extends AbstractGatewayPlugin {
 //            Flux<DataBuffer> body = exchange.getRequest().getBody();
 //            return exchange.getResponse().writeWith(body);
             // 第二种写法
-            return exchange.getRequest().getBody().flatMap(body->exchange.getResponse().writeWith(Mono.just(body))).then();
+            return exchange.getRequest().getBody().flatMap(body->exchange.getResponse().writeWith(Mono.just(body))).then(chain.handle(exchange));
         }
         // 2. 从request 中获取请求参数
         Flux<DataBuffer> body = exchange.getRequest().getBody();
@@ -46,7 +52,7 @@ public class DirectGatewayPlugin extends AbstractGatewayPlugin {
         exchange.getResponse().getHeaders().add("hhgateway.version", "v0.0.1");
         exchange.getResponse().getHeaders().add("hhgateway.plugin", getName());
         return responseBody.flatMap(result->exchange.getResponse().writeWith(Mono.just(exchange.getResponse()
-                .bufferFactory().wrap(result.getBytes()))));
+                .bufferFactory().wrap(result.getBytes())))).then(chain.handle(exchange));
     }
 
     @Override
