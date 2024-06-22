@@ -24,9 +24,11 @@ public class DefaultGatewayPluginChain implements GatewayPluginChain {
     // 每次调用 handle方法，都执行下一个 GatewayPlugin 的 handle
     @Override
     public Mono<Void> handle(ServerWebExchange exchange) {
-        if (Objects.nonNull(pluginList) && index < pluginList.size()) {
-            return pluginList.get(index++).handle(exchange, this);
-        }
-        return Mono.empty();
+        return Mono.defer(()->{
+            if (Objects.nonNull(pluginList) && index < pluginList.size()) {
+                return pluginList.get(index++).handle(exchange, this);
+            }
+            return Mono.empty();
+        });
     }
 }
